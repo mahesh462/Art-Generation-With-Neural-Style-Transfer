@@ -1,7 +1,5 @@
 
-# coding: utf-8
-
-# # Deep Learning & Art: Neural Style Transfer
+#Deep Learning & Art: Neural Style Transfer
 
 
 
@@ -29,15 +27,15 @@ model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat")
 pp.pprint(model)
 
 
-# * The model is stored in a python dictionary.  
-# * The python dictionary contains key-value pairs for each layer.  
-# * The 'key' is the variable name and the 'value' is a tensor for that layer.  
+#  The model is stored in a python dictionary.  
+#  The python dictionary contains key-value pairs for each layer.  
+#  The 'key' is the variable name and the 'value' is a tensor for that layer.  
 # In our running example, the content image C will be the picture of the Louvre Museum in Paris. Run the code below to see a picture of the Louvre.
 
 
 
 content_image = scipy.misc.imread("images/louvre.jpg")
-imshow(content_image);
+
 
 
 def compute_content_cost(a_C, a_G):
@@ -53,14 +51,14 @@ def compute_content_cost(a_C, a_G):
     """
     
     
-    # Retrieve dimensions from a_G (≈1 line)
+    # Retrieve dimensions from a_G 
     m, n_H, n_W, n_C = a_G.get_shape().as_list()
     
-    # Reshape a_C and a_G (≈2 lines)
+    # Reshape a_C and a_G 
     a_C_unrolled = tf.reshape(a_C , shape = [m , n_H*n_W , n_C])
     a_G_unrolled = tf.reshape(a_G , shape = [m , n_H*n_W , n_C])
     
-    # compute the cost with tensorflow (≈1 line)
+    # compute the cost with tensorflow 
     J_content = tf.reduce_sum(tf.square(tf.subtract(a_C,a_G)))/(4*n_H*n_W*n_C)
     
     
@@ -69,25 +67,10 @@ def compute_content_cost(a_C, a_G):
 
 
 
-tf.reset_default_graph()
 
-with tf.Session() as test:
-    tf.set_random_seed(1)
-    a_C = tf.random_normal([1, 4, 4, 3], mean=1, stddev=4)
-    a_G = tf.random_normal([1, 4, 4, 3], mean=1, stddev=4)
-    J_content = compute_content_cost(a_C, a_G)
-    print("J_content = " + str(J_content.eval()))
-
-
-# **Expected Output**:
-
-# Computing the style cost
-
-# For our running example, we will use the following style image: 
 
 
 style_image = scipy.misc.imread("images/monet_800600.jpg")
-imshow(style_image);
 
 
 
@@ -107,16 +90,6 @@ def gram_matrix(A):
 
 
 
-tf.reset_default_graph()
-
-with tf.Session() as test:
-    tf.set_random_seed(1)
-    A = tf.random_normal([3, 2*1], mean=1, stddev=4)
-    GA = gram_matrix(A)
-    
-    print("GA = \n" + str(GA.eval()))
-
-
 
 def compute_layer_style_cost(a_S, a_G):
     """
@@ -129,18 +102,18 @@ def compute_layer_style_cost(a_S, a_G):
     """
     
     
-    # Retrieve dimensions from a_G (≈1 line)
+    # Retrieve dimensions from a_G 
     m, n_H, n_W, n_C = a_G.get_shape().as_list()
     
-    # Reshape the images to have them of shape (n_C, n_H*n_W) (≈2 lines)
+    # Reshape the images to have them of shape (n_C, n_H*n_W) 
     a_S = tf.transpose(tf.reshape(a_S , shape = [m , n_H*n_W , n_C]) , perm = [0,2,1])
     a_G = tf.transpose(tf.reshape(a_G , shape = [m , n_H*n_W , n_C]) , perm = [0,2,1])
 
-    # Computing gram_matrices for both images S and G (≈2 lines)
+    # Computing gram_matrices for both images S and G 
     GS = tf.matmul(a_S , tf.transpose(a_S , perm = [0,2,1]))
     GG = tf.matmul(a_G , tf.transpose(a_G , perm = [0,2,1]))
 
-    # Computing the loss (≈1 line)
+    # Computing the loss 
     J_style_layer = tf.reduce_sum(tf.square(tf.subtract(GS , GG)))/(4*(n_H*n_C*n_W)**2)
     
    
@@ -148,17 +121,6 @@ def compute_layer_style_cost(a_S, a_G):
     return J_style_layer
 
 
-
-
-tf.reset_default_graph()
-
-with tf.Session() as test:
-    tf.set_random_seed(1)
-    a_S = tf.random_normal([1, 4, 4, 3], mean=1, stddev=4)
-    a_G = tf.random_normal([1, 4, 4, 3], mean=1, stddev=4)
-    J_style_layer = compute_layer_style_cost(a_S, a_G)
-    
-    print("J_style_layer = " + str(J_style_layer.eval()))
 
 
 
@@ -236,16 +198,6 @@ def total_cost(J_content, J_style, alpha = 10, beta = 40):
 
 
 
-tf.reset_default_graph()
-
-with tf.Session() as test:
-    np.random.seed(3)
-    J_content = np.random.randn()    
-    J_style = np.random.randn()
-    J = total_cost(J_content, J_style)
-    print("J = " + str(J))
-
-
 
 # Reset the graph
 tf.reset_default_graph()
@@ -267,7 +219,7 @@ style_image = reshape_and_normalize_image(style_image)
 
 
 generated_image = generate_noise_image(content_image)
-imshow(generated_image[0]);
+
 
 
 # Load pre-trained VGG19 model
@@ -276,7 +228,7 @@ imshow(generated_image[0]);
 model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat")
 
 
-# #### Content Cost
+# Content Cost
 
 # Assign the content image to be the input of the VGG model.  
 sess.run(model['input'].assign(content_image))
@@ -358,9 +310,13 @@ def model_nn(sess, input_image, num_iterations = 200):
             
             # save current generated image in the "/output" directory
             save_image("output/" + str(i) + ".png", generated_image)
+            p = scipy.misc.imread("output/"+ str(i) + ".png")
+            imshow(p);
     
     # save last generated image
     save_image('output/generated_image.jpg', generated_image)
+    q = scipy.misc.imread("output/generated_image.jpg")
+    imshow(q);
     
     return generated_image
 
