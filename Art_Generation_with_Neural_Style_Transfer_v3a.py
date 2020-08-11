@@ -3,7 +3,7 @@
 
 # # Deep Learning & Art: Neural Style Transfer
 
-# In[1]:
+
 
 import os
 import sys
@@ -20,9 +20,9 @@ get_ipython().magic('matplotlib inline')
 
 
 
-# Run the following code to load parameters from the VGG model. This may take a few seconds. 
+#  load parameters from the VGG model. 
 
-# In[2]:
+
 
 pp = pprint.PrettyPrinter(indent=4)
 model = load_vgg_model("pretrained-model/imagenet-vgg-verydeep-19.mat")
@@ -34,7 +34,7 @@ pp.pprint(model)
 # * The 'key' is the variable name and the 'value' is a tensor for that layer.  
 # In our running example, the content image C will be the picture of the Louvre Museum in Paris. Run the code below to see a picture of the Louvre.
 
-# In[3]:
+
 
 content_image = scipy.misc.imread("images/louvre.jpg")
 imshow(content_image);
